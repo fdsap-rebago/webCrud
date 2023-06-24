@@ -54,8 +54,8 @@
                         <td>{{.Fullname}}</td>
                         <td>{{.Username}}</td>
                         <td>
-                            <a data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary"
-                                onclick="openModal('{{.}}')">View</a>
+                            <a data-bs-toggle="modal" data-bs-target="#dashboardModal" class="btn btn-primary"
+                                data-user-data="{{.}}" onclick="showDetails(this)">View</a>
                             <a href="http://" class="btn btn-secondary">Edit</a>
                         </td>
                     </tr>
@@ -65,70 +65,52 @@
         </div>
     </div>
 
-   <!-- The modal -->
-<div id="myModal" class="modal">
-    <!-- Modal content -->
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Modal Title</h5>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <!-- Modal -->
+    <div class="modal fade" id="dashboardModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="fullname" placeholder="Edit fullname">
+                        <label for="fullname">Fullname</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="username" placeholder="Edit username">
+                        <label for="username">Username</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="password" placeholder="Edit password">
+                        <label for="password">Password</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Update</button>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-          <p id="modalContent"></p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
     </div>
-  </div>
-  
+
+
 
 
     <script>
         // Function to open the modal and pass the value
-        function openModal(value) {
+        function showDetails(user) {
+            let userDetails = user.getAttribute("data-user-data")
             // var users = value
-            var cleanString = value.replace(/[{}]/g, '');
+            var cleanString = userDetails.replace(/[{}]/g, '');
             var values = cleanString.split(' ');
-            var id = values[0];
-            var firstName = values[1];
-            var lastName = values[2];
-            var password = values[3];
-            // var values = Object.values(value)
-            // const { id, fullname, username, password } = values
-
-            var modal = document.getElementById("myModal");
-            var modalContent = document.getElementById("modalContent");
-            modal.style.display = "block"; // Display the modal
-            modalContent.innerHTML = "Selected value: " + firstName +" "+ lastName; // Set the content of the modal
+            $('#fullname').val(values[1] + " " + values[2]);
+            $('#username').val(values[3]);
+            $('#password').val(values[4]);
         }
-
-        // Function to close the modal
-        function closeModal() {
-            var modal = document.getElementById("myModal");
-            modal.style.display = "none"; // Hide the modal
-        }
-
-        // Close the modal when the user clicks on the close button (x)
-        document.getElementsByClassName("close")[0].onclick = function () {
-            closeModal();
-        };
-
-        // Close the modal when the user clicks outside the modal
-        window.onclick = function (event) {
-            var modal = document.getElementById("myModal");
-            if (event.target == modal) {
-                closeModal();
-            }
-        };
     </script>
-
-
-
-
 
     <!-- Sweet Alert -->
     {{if eq .Status true}}
